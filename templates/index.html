@@ -13,20 +13,30 @@
 <body>
     <header class="app-header">
         <div class="header-container">
-            <h1>Tech News Grabber</h1>
-            <button id="refresh-btn" class="refresh-btn">
-                <span class="btn-text">Refresh News</span>
-                <span class="spinner" id="spinner"></span>
-            </button>
+            <div class="header-left">
+                <h1>Tech News Grabber</h1>
+                <span id="article-count" class="article-count hidden"></span>
+            </div>
+            <div class="header-right">
+                <span id="last-updated" class="last-updated hidden"></span>
+                <button id="refresh-btn" class="refresh-btn" title="Refresh news (Press R)">
+                    <span class="btn-text">Refresh News</span>
+                    <span class="spinner" id="spinner" role="status" aria-label="Loading articles"></span>
+                    <kbd class="kbd-hint">R</kbd>
+                </button>
+            </div>
         </div>
     </header>
 
     <main class="main-content">
         <div id="error-container" class="error-container hidden"></div>
-        <div id="news-grid" class="news-grid">
+        <div id="news-grid" class="news-grid" aria-live="polite" aria-atomic="false">
             <!-- Articles will be injected here -->
         </div>
     </main>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>

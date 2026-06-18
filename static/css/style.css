@@ -11,6 +11,8 @@
     --card-hover-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
     --linkedin-color: #0a66c2;
     --linkedin-hover: #004182;
+    --toast-bg: #1e293b;
+    --toast-text: #f8fafc;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -25,6 +27,8 @@
         --primary-hover: #60a5fa;
         --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
         --card-hover-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+        --toast-bg: #f1f5f9;
+        --toast-text: #0f172a;
     }
 }
 
@@ -41,6 +45,8 @@ body {
     line-height: 1.5;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+/* ── Header ─────────────────────────────────────────── */
 
 .app-header {
     background-color: var(--surface-color);
@@ -59,6 +65,21 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1rem;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
 }
 
 h1 {
@@ -68,7 +89,28 @@ h1 {
     background: linear-gradient(to right, var(--primary-color), #8b5cf6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    white-space: nowrap;
 }
+
+/* Article count badge */
+.article-count {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background-color: var(--border-color);
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    white-space: nowrap;
+}
+
+/* Last updated label */
+.last-updated {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+/* ── Refresh Button ──────────────────────────────────── */
 
 .refresh-btn {
     display: flex;
@@ -83,6 +125,7 @@ h1 {
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s, transform 0.1s;
+    position: relative;
 }
 
 .refresh-btn:hover {
@@ -98,6 +141,29 @@ h1 {
     cursor: not-allowed;
 }
 
+/* Focus ring for keyboard users */
+.refresh-btn:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 3px;
+}
+
+/* Keyboard shortcut badge */
+.kbd-hint {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    font-size: 0.7rem;
+    font-weight: 600;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 0.25rem;
+    padding: 0.1rem 0.35rem;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+}
+
+/* Spinner */
 .spinner {
     display: none;
     width: 1rem;
@@ -112,6 +178,8 @@ h1 {
     to { transform: rotate(360deg); }
 }
 
+/* ── Main Content ────────────────────────────────────── */
+
 .main-content {
     max-width: 1200px;
     margin: 2rem auto;
@@ -123,6 +191,8 @@ h1 {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 2rem;
 }
+
+/* ── Article Card ────────────────────────────────────── */
 
 .article-card {
     background-color: var(--surface-color);
@@ -159,6 +229,10 @@ h1 {
     font-weight: 600;
     margin-bottom: 0.5rem;
     line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .article-title a {
@@ -168,6 +242,15 @@ h1 {
 
 .article-title a:hover {
     color: var(--primary-color);
+}
+
+/* Focus ring for article links */
+.article-title a:focus-visible,
+.read-more:focus-visible,
+.linkedin-share:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 0.25rem;
 }
 
 .article-meta {
@@ -226,10 +309,35 @@ h1 {
     align-items: center;
     justify-content: center;
     gap: 0.375rem;
+    position: relative;
 }
 
 .linkedin-share:hover {
     background-color: var(--linkedin-hover);
+}
+
+/* LinkedIn tooltip */
+.linkedin-share::after {
+    content: "Share this article to LinkedIn";
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--toast-bg);
+    color: var(--toast-text);
+    font-size: 0.72rem;
+    font-weight: 400;
+    white-space: nowrap;
+    padding: 0.35rem 0.6rem;
+    border-radius: 0.375rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    z-index: 20;
+}
+
+.linkedin-share:hover::after {
+    opacity: 1;
 }
 
 .linkedin-icon {
@@ -238,6 +346,8 @@ h1 {
     fill: currentColor;
 }
 
+/* ── Error State ─────────────────────────────────────── */
+
 .hidden {
     display: none;
 }
@@ -245,20 +355,76 @@ h1 {
 .error-container {
     background-color: #fee2e2;
     color: #b91c1c;
-    padding: 1rem;
-    border-radius: 0.5rem;
+    padding: 1.25rem 1.5rem;
+    border-radius: 0.75rem;
     margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
     text-align: center;
 }
 
 @media (prefers-color-scheme: dark) {
     .error-container {
-        background-color: #7f1d1d;
-        color: #fecaca;
+        background-color: #450a0a;
+        color: #fca5a5;
     }
 }
 
-/* Skeleton Loading State */
+.error-message {
+    font-weight: 500;
+}
+
+.retry-btn {
+    background-color: #b91c1c;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.25rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.retry-btn:hover {
+    background-color: #991b1b;
+}
+
+.retry-btn:focus-visible {
+    outline: 2px solid #b91c1c;
+    outline-offset: 3px;
+}
+
+/* ── Toast Notification ──────────────────────────────── */
+
+.toast {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background-color: var(--toast-bg);
+    color: var(--toast-text);
+    padding: 0.65rem 1.25rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 0.2);
+    z-index: 100;
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+/* ── Skeleton Loading State ──────────────────────────── */
+
 .skeleton {
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
@@ -279,6 +445,28 @@ h1 {
     border-radius: 0.25rem;
     margin-bottom: 0.5rem;
 }
+
 .skeleton-text.short { width: 40%; }
 .skeleton-text.title { height: 1.5rem; margin-bottom: 1rem; }
-.skeleton-btn { height: 2.5rem; background-color: var(--border-color); border-radius: 0.5rem; flex: 1;}
+.skeleton-btn { height: 2.5rem; background-color: var(--border-color); border-radius: 0.5rem; flex: 1; }
+
+/* ── Responsive ──────────────────────────────────────── */
+
+@media (max-width: 480px) {
+    .header-container {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    h1 {
+        font-size: 1.2rem;
+    }
+
+    .last-updated {
+        display: none;
+    }
+
+    .article-image {
+        height: 160px;
+    }
+}
